@@ -5,7 +5,7 @@ class Product:
         self.stock = self._validate_stock(stock)
 
     def _validate_name(self, name):
-        if not isinstance(name, str) or len(name) < 1:
+        if not isinstance(name, str) or len(name.strip()) < 1:
             raise ValueError("Название должно быть строкой длиной не менее одного символа")
         else:
             return name.strip()
@@ -24,23 +24,21 @@ class Product:
 
     def change_price(self, new_price):
         if not isinstance(new_price, (int, float)) or new_price <= 0:
-            raise ValueError("Не удалось установить новое значение цены")
+            raise ValueError("Указано неверное значение новой цены")
         else:
             self.price = new_price
 
     def is_available(self, quantity):
-        if not isinstance(quantity, int) or quantity < 0:
-            raise ValueError("Указано неверное количество на покупку")
+        if not isinstance(quantity, int) or quantity <= 0:
+            raise ValueError("Указано неверное значение кол-ва")
         elif self.stock < quantity:
             return False
         else:
             return True
 
     def purchase(self, quantity):
-        if not isinstance(quantity, int) or quantity <= 0:
-            raise ValueError("Указано неверное количество на покупку")
-        elif self.stock >= quantity:
+        if self.is_available(quantity):
             self.stock -= quantity
-            return self.stock
+            return True
         else:
             return False
