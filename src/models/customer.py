@@ -10,6 +10,7 @@ class Customer:
         if not isinstance(name, str) or len(name.strip()) < 1:
             raise ValueError("Имя должно быть строкой длиной не менее одного символа")
         return name.strip()
+
     @staticmethod
     def _validate_email(email):
         if not isinstance(email, str):

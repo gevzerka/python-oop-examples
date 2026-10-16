@@ -16,4 +16,19 @@ class Order:
         return sum(item.quantity for item in self.items)
 
     def place_order(self):
-        pass
+        if not self.items: return False
+
+        positions = {}
+        for item in self.items:
+            if item.product in positions:
+                positions[item.product] += item.quantity
+            else:
+                positions[item.product] = item.quantity
+
+        for key, val in positions.items():
+            if not key.is_available(val):
+                return False
+
+        for key, val in positions.items():
+            key.purchase(val)
+        return True
