@@ -6,19 +6,19 @@ class Product:
 
     @staticmethod
     def _validate_name(name):
-        if not isinstance(name, str) or len(name.strip()) < 1:
+        if not isinstance(name, str) or len(name.strip()) <= 1:
             raise ValueError("Название должно быть строкой длиной не менее одного символа")
         return name.strip()
 
     @staticmethod
     def _validate_price(price):
-        if not isinstance(price, (int, float)) or price <= 0:
+        if not isinstance(price, (int, float)) or (type(price) is bool) or price <= 0:
             raise ValueError("Задано неверное значение цены")
         return price
 
     @staticmethod
     def _validate_stock(stock):
-        if not isinstance(stock, int) or stock < 0:
+        if type(stock) is not int or stock < 0:
             raise ValueError("Задано неверное количество товара")
         return stock
 
@@ -26,7 +26,7 @@ class Product:
         self.price = self._validate_price(new_price)
 
     def is_available(self, quantity):
-        if not isinstance(quantity, int) or quantity <= 0:
+        if type(quantity) is not int or quantity <= 0:
             raise ValueError("Указано неверное количество на покупку")
         elif self.stock < quantity:
             return False
