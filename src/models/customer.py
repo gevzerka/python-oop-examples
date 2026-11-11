@@ -1,25 +1,38 @@
 import re
 
+_ENAIL_RE= re.compile(r"[^@\s]+@[^@\s]+\.[^@\s]+")
 class Customer:
-    def __init__(self, name, email):
-        self.name = self._validate_name(name)
-        self.email = self._validate_email(email)
+    def __init__(self, name: str, email: str) -> None:
+        self.name = name
+        self.email = email
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @name.setter
+    def name(self, value: str) -> None:
+        self._name = self._validate_name(value)
+
+    @property
+    def email(self) -> str:
+        return self._email
+
+    @email.setter
+    def email(self, value: str) -> None:
+        self._email = self._validate_email(value)
 
     @staticmethod
-    def _validate_name(name):
-        if not isinstance(name, str) or len(name.strip()) < 1:
-            raise ValueError("Имя должно быть строкой длиной не менее одного символа")
+    def _validate_name(name: str) -> str:
+        if not isinstance(name, str) or not name.strip():
+            raise ValueError("Имя должно быть непустой строкой")
         return name.strip()
 
     @staticmethod
-    def _validate_email(email):
-        if not isinstance(email, str):
+    def _validate_email(email: str) -> str:
+        if not isinstance(email, str) or not _ENAIL_RE.fullmatch(email.strip()):
             raise ValueError("Указана неверная почта")
-        else:
-            match = re.fullmatch(r'\w+@\w+\.\w+', email.strip())
-            if not match:
-                raise ValueError("Указана неверная почта")
-            return match.group().strip()
+        return email.strip()
 
-    def update_email(self, new_email):
-        self.email = self._validate_email(new_email)
+    def __repr__(self) -> str:
+        return f"Customer(name={self._name!r}, email={self._email!r}"
